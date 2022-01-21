@@ -1,0 +1,6 @@
+build/
+dist/
+log/
+data/
+node_modules/
+.env
