@@ -8,9 +8,12 @@ import expressSession from 'express-session';
 import selfsigned from 'selfsigned';
 import fs from 'fs';
 import Chalk from 'chalk';
-import { authentication } from '@dt-esa/authorizer';
+import crypto from 'crypto';
+import helmet from 'helmet';
 import dotenv from "dotenv";
 dotenv.config();
+
+import { authentication } from '@dt-esa/authorizer';
 
 try {
     
@@ -22,10 +25,26 @@ try {
         filter: (req, res) => req.headers['x-no-compression'] ? false : compression.filter(req, res)
     }));
     
+    let sessionSecret;
+    const sessionFile = __dirname + `/../data/session.secret`;
+    if (fs.existsSync(sessionFile)) 
+        sessionSecret = fs.readFileSync(sessionFile, {encoding: "utf-8"});
+    else {
+        sessionSecret = crypto.randomBytes(32).toString();
+        fs.writeFileSync(sessionFile, sessionSecret);
+    } 
+
     app.use(cookieParser());
-    app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
+    app.use(expressSession({ secret: sessionSecret, resave: true, saveUninitialized: false }));
     app.use(express.urlencoded({ extended : true }));
 
+    app.use(helmet.dnsPrefetchControl({ allow: true }));
+    app.use(helmet.frameguard({ action: "sameorigin" }));
+    app.use(helmet.hidePoweredBy());
+    app.use(helmet.hsts({ maxAge: 86400 * 7 }));
+    app.use(helmet.permittedCrossDomainPolicies());
+    app.use(helmet.referrerPolicy());
+    app.use(helmet.xssFilter());
 
     app.use(authentication({
         mode: 'client',
@@ -38,6 +57,7 @@ try {
     // Add layers from "api".
     app.use(require("./api/api-client"));
     app.use(require("./api/authorization"));
+    app.use(require("./api/datastore"));
     
     // Handle 404s.
     app.use((req, res, next) => next(createError(404)));
