@@ -22,6 +22,7 @@
     "@dt-esa/authorizer": "^1.6.1",
     "@dt-esa/dynatrace-api-client": "^1.213.4",
     "@dt-esa/platform-constants": "^1.1.0",
+    "@types/level": "^6.0.0",
     "chalk": "^4.1.2",
     "compression": "^1.7.4",
     "cookie-parser": "~1.4.4",
