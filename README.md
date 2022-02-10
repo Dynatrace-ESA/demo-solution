@@ -4,6 +4,8 @@ Sample project for writing Dynatrace Platform extensions in **NodeJS**.
 
 > This is a work-in-progress sample project.
 
+A dependency map can be found [here](https://npmgraph.js.org/?q=@dt-esa/dynatrace-api-client).
+
 ## Motivation
 
 Having the ability to write a complex Dynatrace platform extension with a solid 
