@@ -19,7 +19,7 @@
     "dev:inspect": "nodemon --ext \"ts,json\" --ignore \"src /**/*.spec.ts\" --exec \"node --inspect=0.0.0.0:9229 --require ts-node/register ./src/index.ts\""
   },
   "dependencies": {
-    "@dt-esa/authorizer": "^1.6.1",
+    "@dt-esa/authorizer": "^1.7.4",
     "@dt-esa/dynatrace-api-client": "^1.234.1",
     "@dt-esa/platform-constants": "^1.1.0",
     "@types/level": "^6.0.0",
